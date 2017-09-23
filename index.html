@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+	<script	type="text/javascript"	src="main.js"></script>
+	<title>Processor Management and Job Scheduling</title>
+	<style type="text/css">
+		.custom-file-control:before{
+			content: "Browse";
+		}
+		.custom-file-control:after{
+			content: "Add files..";
+		}
+
+		/*when a value is selected, this class removes the content */
+		.custom-file-control.selected::after {
+			content: "" !important;
+		}
+
+		.custom-file {
+			overflow: hidden;
+		}
+		.custom-file-control {
+			white-space: nowrap;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col col-sm-9">
+				<label class="custom-file">
+					<input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+					<span class="custom-file-control form-control-file"></span>
+				</label>
+			</div>
+			<div class="col col-lg-3">
+				<button type="button" class="btn btn-primary" id="submit-file">Primary</button>
+			</div>
+		</div>
+		<p id="displayer"></p>
+	</div>
+</body>
+<script type="text/javascript">
+	$('.custom-file-input').on('change',function(){
+		$(this).next('.form-control-file').addClass("selected").html($(this).val().replace(/^.*\\/, ""));
+	});
+
+	$("#submit-file").click(function() {
+		// Check for the various File API support.
+		if (window.File && window.FileReader && window.FileList && window.Blob) {
+			var f = document.getElementById('exampleInputFile').files[0]; 
+			var system = new System();
+
+			if (f) {
+				var r = new FileReader();
+				r.onload = function(e) { 
+					var contents = e.target.result;
+					contents = contents.split('\n');
+					for (var i = 0; i < contents.length; i++) {
+						var line = contents[i].split(" ");
+						system.addProcess(new Process(line[0], parseInt(line[1]), parseInt(line[2]), parseInt(line[3])));
+					}
+
+					console.log(system);
+					console.log(system.calculateRoundRobin(4));
+					console.log(system.calculateFCFS());
+					console.log(system.calculateSJF());
+					console.log(system.calculatePriority());
+					console.log(system.calculateSRPT());
+				}
+				r.readAsText(f);
+			} else { 
+				alert("Failed to load file");
+			}
+		} else {
+			alert('The File APIs are not fully supported in this browser.');
+		}
+	});
+</script>
+</html>
