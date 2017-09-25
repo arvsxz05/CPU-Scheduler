@@ -4,6 +4,7 @@ class Process {
 		this.arrival = arrival;
 		this.burst = burst;
 		this.priority = priority;
+		this.remain = burst
 	}
 }
 
@@ -89,19 +90,20 @@ class System {
 	}
 
 	calculateRoundRobin(timeslice) {
-		// var waiting_times = [];
+		var waiting_times = [];
 		var job_order = [];
 		var process_w_time = [];
 		var current_time = 0;
 		var cumulative = 0;
 
 		for(var i = 0; i < this.processes.length; i++) {
-			// waiting_times.push({process: this.processes[i], waiting_time: 0});
+			waiting_times.push({process: this.processes[i], waiting_time: null});
 			process_w_time.push({process: this.processes[i], remain: this.processes[i].burst});
 		}
 
 		var ctr = 0;
 		while(process_w_time.length > 0) {
+			var time;
 			ctr %= process_w_time.length;
 			if(process_w_time[ctr].remain > 0) {
 				if(timeslice >= process_w_time[ctr].remain) {
@@ -119,11 +121,29 @@ class System {
 			++ctr;
 		}
 
-		return {job_order: job_order, time: current_time};
+		for (var i = job_order.length - 1; i >= 0; i--) {
+			var temp_process = job_order[i].process;
+			var upd_wait = waiting_times.find(function (curr_process) {
+				if(temp_process == curr_process.process) {
+					return curr_process;
+				}
+			});
+			if(upd_wait.waiting_time == null)
+				upd_wait.waiting_time = job_order[i].time_occured;
+			else {
+				upd_wait.waiting_time -= timeslice;
+			}
+		}
+
+		for (var i = waiting_times.length - 1; i >= 0; i--) {
+			cumulative += waiting_times[i].waiting_time;
+		}
+
+		return {job_order: job_order, waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
 	}
 
 	calculateSRPT() {
-		// var waiting_times = [];
+		var waiting_times = [];
 		var job_order = [];
 		var ordered_list_arrival = [];
 		var queue = [];
@@ -132,7 +152,7 @@ class System {
 		var cumulative = 0;
 
 		for(var i = 0; i < this.processes.length; i++) {
-			// waiting_times.push({process: this.processes[i], waiting_time: 0});
+			waiting_times.push({process: this.processes[i], waiting_time: null});
 			ordered_list_arrival.push({process: this.processes[i], remaining: this.processes[i].burst});
 		}
 
@@ -143,8 +163,6 @@ class System {
 		});
 
 		do {
-			// console.log(ordered_list_arrival);
-			
 			while(ordered_list_arrival.length > 0 && ordered_list_arrival[0].process.arrival == current_time) {
 				binaryInsert(ordered_list_arrival.shift(), queue);
 			}
@@ -157,18 +175,47 @@ class System {
 				currentProcess = queue.shift();
 				binaryInsert(temp, queue);
 			}
-			job_order.push({process: currentProcess.process, time_occured: current_time});
-			currentProcess.remaining--;
+			if(currentProcess != null) {
+				job_order.push({process: currentProcess.process, time_occured: current_time});
+				currentProcess.remaining--;
+			}
 			current_time++;
 			if(currentProcess && currentProcess.remaining <= 0)
 				currentProcess = null;
 
 		} while (currentProcess != null || queue.length != 0 || ordered_list_arrival.length != 0);
 
-		for(var i=0; i<job_order.length; i++)
-			console.log(job_order[i].process.name + " ");
+		job_order = merge(job_order);
 
-		return {job_order: job_order, time: current_time};
+		for (var i = this.processes.length - 1; i >= 0; i--) {
+			this.processes[i].remain = this.processes[i].burst;
+		}
+
+		var current_time2 = current_time;
+
+		for (var i = job_order.length - 1; i >= 0; i--) {
+			var proc_length = current_time2 - job_order[i].time_occured;
+			current_time2 = current_time2 - proc_length;
+			var upd_wait = waiting_times.find(function (curr_process) {
+				if(job_order[i].process == curr_process.process) {
+					return curr_process;
+				}
+			});
+			if(upd_wait.waiting_time == null) {
+				upd_wait.waiting_time = job_order[i].time_occured - job_order[i].process.arrival;
+			}
+			else {
+				upd_wait.waiting_time -= proc_length;
+			}
+		}
+
+		for (var i = waiting_times.length - 1; i >= 0; i--) {
+			cumulative += waiting_times[i].waiting_time;
+		}
+
+		console.log(cumulative);
+
+		return {job_order: job_order, waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
 	}
 }
 
@@ -233,4 +280,27 @@ function binaryInsert(item, array, startVal, endVal){
 		}
 	}
 	//we don't insert duplicates // PAKYU
+}
+
+function merge(job_order) {
+	var current_time = 0, ctr = -1;
+	var merged_job_order = [];
+	for(var i = 0; i < job_order.length; i++) {
+		if(merged_job_order.length == 0 || merged_job_order[ctr].process != job_order[i].process) {
+			merged_job_order.push({process: job_order[i].process, time_occured: job_order[i].time_occured, remain: job_order[i].process.burst});
+			if(ctr != -1) {
+				merged_job_order[ctr].process.remain -= current_time - merged_job_order[ctr].time_occured;
+				merged_job_order[ctr].remain = merged_job_order[ctr].process.remain;
+			}
+			ctr++;
+		}
+		current_time++;
+	}
+
+	if(ctr != -1) {
+		merged_job_order[ctr].process.remain -= current_time - merged_job_order[ctr].time_occured;
+		merged_job_order[ctr].remain = merged_job_order[ctr].process.remain;
+	}
+
+	return merged_job_order;
 }
