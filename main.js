@@ -4,7 +4,8 @@ class Process {
 		this.arrival = arrival;
 		this.burst = burst;
 		this.priority = priority;
-		this.remain = burst
+		this.remain = burst;
+		this.color = getRandomColor();
 	}
 }
 
@@ -18,13 +19,6 @@ class System {
 			throw "Process must be valid.";
 
 		this.processes.push(newProcess);
-	}
-
-	sortByArrival() {
-		return this.processes.sort(function(a, b) {
-			var x = a[arrival]; var y = b[arrival];
-			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-		});
 	}
 
 	calculateFCFS() {
@@ -185,6 +179,8 @@ class System {
 
 		} while (currentProcess != null || queue.length != 0 || ordered_list_arrival.length != 0);
 
+		// console.log(job_order);
+
 		job_order = merge(job_order);
 
 		for (var i = this.processes.length - 1; i >= 0; i--) {
@@ -212,9 +208,6 @@ class System {
 		for (var i = waiting_times.length - 1; i >= 0; i--) {
 			cumulative += waiting_times[i].waiting_time;
 		}
-
-		console.log(cumulative);
-
 		return {job_order: job_order, waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
 	}
 }
@@ -279,7 +272,6 @@ function binaryInsert(item, array, startVal, endVal){
 			return;
 		}
 	}
-	//we don't insert duplicates // PAKYU
 }
 
 function merge(job_order) {
@@ -303,4 +295,13 @@ function merge(job_order) {
 	}
 
 	return merged_job_order;
+}
+
+function getRandomColor() {
+	var letters = '0123456789ABCDEF';
+	var color = '#';
+	for (var i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
 }
