@@ -77,30 +77,61 @@
 			</div>
 		</div>
 		<div id="displayer" style="padding-top: 10px;">
-			<div style="padding: 10px;">
+			<div style="padding-top: 10px; padding-bottom: 10px;">
 				<center><h2>First-Come First-Serve</h2></center>
 				<canvas id="canvas1"></canvas>
+				<div class="row" id="display1">
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+				</div>
 			</div>
-			<div style="padding: 10px;">
+			<div style="padding-top: 10px; padding-bottom: 10px;">
 				<center><h2>Shortest Job First</h2></center>
 				<canvas id="canvas2"></canvas>
+				<div class="row" id="display2">
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+				</div>
 			</div>
-			<div style="padding: 10px;">
+			<div style="padding-top: 10px; padding-bottom: 10px;">
 				<center><h2>Priority</h2></center>
 				<canvas id="canvas3"></canvas>
+				<div class="row" id="display3">
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+				</div>
 			</div>
-			<div style="padding: 10px;">
+			<div style="padding-top: 10px; padding-bottom: 10px;">
 				<center><h2>Shortest Remaining Processing Time</h2></center>
 				<canvas id="canvas4"></canvas>
+				<div class="row" id="display4">
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+				</div>
 			</div>
-			<div style="padding: 10px;">
+			<div style="padding-top: 10px; padding-bottom: 10px;">
 				<center><h2>Round Robin</h2></center>
 				<canvas id="canvas5"></canvas>
+				<div class="row" id="display5">
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+					<div class="col col-md-3" style="padding-top: 10px; padding-bottom: 10px;"></div>
+				</div>
 			</div>
 		</div>
 	</div>
 </body>
 <script type="text/javascript">
+	var system;
 	$(document).ready(function() {
 		$(function () {
 			$('[data-toggle="popover"]').popover({
@@ -121,7 +152,7 @@
 			// Check for the various File API support.
 			if (window.File && window.FileReader && window.FileList && window.Blob) {
 				var f = document.getElementById('exampleInputFile').files[0]; 
-				var system = new System();
+				system = new System();
 
 				if (f) {
 					var r = new FileReader();
@@ -145,21 +176,25 @@
 						var canvas = document.getElementById('canvas1');
 						if (canvas.getContext) {
 							var ctx = canvas.getContext('2d');
-
+							$("#display1 > div").html("");
+							$("#display1").before("<center><h4>Waiting Times</h4></center>");
 							var fcfs_obj = system.calculateFCFS();
 							var width = 290;
-							for (var i = fcfs_obj.waiting_times.length - 1; i >= 0; i--) {
+							for (var i = fcfs_obj.waiting_times.length - 1, j = 0; i >= 0; i--, j++) {
 								var process_len = (fcfs_obj.waiting_times[i].process.burst / fcfs_obj.time * 290);
 								ctx.fillStyle = fcfs_obj.waiting_times[i].process.color;
 								ctx.fillRect(width - process_len + 5, 5, process_len, 140);
 								width -= process_len;
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + fcfs_obj.waiting_times[j].process.color + '">' + fcfs_obj.waiting_times[j].process.name + '</span>' + " = " + fcfs_obj.waiting_times[j].waiting_time + "</p>";
+								$("#display1 > div:nth-child(" + (j%4+1) + ")").append(temp);
 							}
 						}
 
 						canvas = document.getElementById('canvas2');
 						if (canvas.getContext) {
 							var ctx = canvas.getContext('2d');
-
+							$("#display2 > div").html("");
+							$("#display2").before("<center><h4>Waiting Times</h4></center>");
 							var sjf_obj = system.calculateSJF();
 							var width = 290;
 							for (var i = sjf_obj.waiting_times.length - 1; i >= 0; i--) {
@@ -168,26 +203,24 @@
 								ctx.fillRect(width - process_len + 5, 5, process_len, 140);
 								width -= process_len;
 							}
-						}
 
-						canvas = document.getElementById('canvas2');
-						if (canvas.getContext) {
-							var ctx = canvas.getContext('2d');
+							sjf_obj.waiting_times.sort(function(a, b) {
+								var x = parseInt(a['process'].name); var y = parseInt(b['process'].name);
+								var c = a['process'].arrival; var d = b['process'].arrival;
+								return ((x < y) ? -1 : ((x > y) ? 1 : ((c < d) ? -1 : ((c > d) ? 1 : 0))));
+							});
 
-							var sjf_obj = system.calculateSJF();
-							var width = 290;
-							for (var i = sjf_obj.waiting_times.length - 1; i >= 0; i--) {
-								var process_len = (sjf_obj.waiting_times[i].process.burst / sjf_obj.time * 290);
-								ctx.fillStyle = sjf_obj.waiting_times[i].process.color;
-								ctx.fillRect(width - process_len + 5, 5, process_len, 140);
-								width -= process_len;
+							for (var i = 0; i < sjf_obj.waiting_times.length; i++) {
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + sjf_obj.waiting_times[i].process.color + '">' + sjf_obj.waiting_times[i].process.name + '</span>' + " = " + sjf_obj.waiting_times[i].waiting_time + "</p>";
+								$("#display2 > div:nth-child(" + (i%4+1) + ")").append(temp);
 							}
 						}
 
 						canvas = document.getElementById('canvas3');
 						if (canvas.getContext) {
 							var ctx = canvas.getContext('2d');
-
+							$("#display3 > div").html("");
+							$("#display3").before("<center><h4>Waiting Times</h4></center>");
 							var priority_obj = system.calculatePriority();
 							var width = 290;
 							for (var i = priority_obj.waiting_times.length - 1; i >= 0; i--) {
@@ -196,12 +229,24 @@
 								ctx.fillRect(width - process_len + 5, 5, process_len, 140);
 								width -= process_len;
 							}
+
+							priority_obj.waiting_times.sort(function(a, b) {
+								var x = parseInt(a['process'].name); var y = parseInt(b['process'].name);
+								var c = a['process'].arrival; var d = b['process'].arrival;
+								return ((x < y) ? -1 : ((x > y) ? 1 : ((c < d) ? -1 : ((c > d) ? 1 : 0))));
+							});
+
+							for (var i = 0; i < priority_obj.waiting_times.length; i++) {
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + priority_obj.waiting_times[i].process.color + '">' + priority_obj.waiting_times[i].process.name + '</span>' + " = " + priority_obj.waiting_times[i].waiting_time + "</p>";
+								$("#display3 > div:nth-child(" + (i%4+1) + ")").append(temp);
+							}
 						}
 
 						canvas = document.getElementById('canvas4');
 						if (canvas.getContext) {
 							var ctx = canvas.getContext('2d');
-
+							$("#display4 > div").html("");
+							$("#display4").before("<center><h4>Waiting Times</h4></center>");
 							var srpt_obj = system.calculateSRPT();
 							var width = 290, start = 5;
 							for (var i = 0; i < srpt_obj.job_order.length; i++) {
@@ -209,18 +254,29 @@
 								ctx.fillStyle = srpt_obj.job_order[i].process.color;
 								ctx.fillRect(5 + srpt_obj.job_order[i].time_occured / srpt_obj.time * 290, 5, process_end, 140);
 							}
+
+							for (var i = 0; i < srpt_obj.waiting_times.length; i++) {
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + srpt_obj.waiting_times[i].process.color + '">' + srpt_obj.waiting_times[i].process.name + '</span>' + " = " + srpt_obj.waiting_times[i].waiting_time + "</p>";
+								$("#display4 > div:nth-child(" + (i%4+1) + ")").append(temp);
+							}
 						}
 
 						canvas = document.getElementById('canvas5');
 						if (canvas.getContext) {
 							var ctx = canvas.getContext('2d');
-
+							$("#display5 > div").html("");
+							$("#display5").before("<center><h4>Waiting Times</h4></center>");
 							var rr_obj = system.calculateRoundRobin(4);
 							var width = 290, start = 5;
 							for (var i = 0; i < rr_obj.job_order.length; i++) {
 								var process_end = 290 - rr_obj.job_order[i].time_occured / rr_obj.time * 290;
 								ctx.fillStyle = rr_obj.job_order[i].process.color;
 								ctx.fillRect(5 + rr_obj.job_order[i].time_occured / rr_obj.time * 290, 5, process_end, 140);
+							}
+
+							for (var i = 0; i < rr_obj.waiting_times.length; i++) {
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + rr_obj.waiting_times[i].process.color + '">' + rr_obj.waiting_times[i].process.name + '</span>' + " = " + rr_obj.waiting_times[i].waiting_time + "</p>";
+								$("#display5 > div:nth-child(" + (i%4+1) + ")").append(temp);
 							}
 						}
 
@@ -229,7 +285,7 @@
 						// console.log(system.calculateFCFS());
 						// console.log(system.calculateSJF());
 						// console.log(system.calculatePriority());
-						// console.log(system.calculateSRPT());
+						console.log(system.calculateSRPT());
 					}
 					r.readAsText(f);
 				} else { 
