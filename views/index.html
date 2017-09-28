@@ -6,7 +6,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 	<script src="https://use.fontawesome.com/31f1fb129a.js"></script>
-	<script	type="text/javascript"	src="main.js"></script>
+	<script type="text/javascript" src="/static/main.js"></script>
 	<title>Processor Management and Job Scheduling</title>
 	<style type="text/css">
 		.custom-file-control:before{
@@ -143,6 +143,10 @@
 <script type="text/javascript">
 	var system;
 	$(document).ready(function() {
+		$('#instructions').click(function() {
+			window.open('/static/Lab_Exercise_2.pdf');
+		});
+
 		$(function () {
 			$('[data-toggle="popover"]').popover({
 				trigger: 'hover'
@@ -152,9 +156,6 @@
 		$(".hide-first").css("display", "none");
 
 		$("canvas").outerHeight(50);
-		// $(window).on("resize", function() {
-		// 	$("#canvas").outerHeight($(window).height()-$("#canvas").offset().top - Math.abs($("#canvas").outerHeight(true) - $("#canvas").outerHeight()) - 30);
-		// });
 
 		$('.custom-file-input').on('change',function(){
 			$(this).next('.form-control-file').addClass("selected").html($(this).val().replace(/^.*\\/, ""));
@@ -302,13 +303,6 @@
 
 							$("#awt5").html("<center><strong>Average Waiting Time = " + rr_obj.cumulative + " / " + rr_obj.waiting_times.length + " = " + rr_obj.average_wt + "</strong></center>");
 						}
-
-						// console.log(system);
-						// console.log(system.calculateRoundRobin(4));
-						// console.log(system.calculateFCFS());
-						// console.log(system.calculateSJF());
-						// console.log(system.calculatePriority());
-						// console.log(system.calculateSRPT());
 					}
 					r.readAsText(f);
 				} else { 

@@ -1,0 +1,30 @@
+{
+  "name": "cpu-scheduler",
+  "version": "1.0.0",
+  "description": "Lab Exercise 1 for CMSC 125",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arvsxz05/CPU-Scheduler.git"
+  },
+  "keywords": [
+    "Scheduler",
+    "Operating Systems",
+    "CPU"
+  ],
+  "author": "Arvin Arbuis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arvsxz05/CPU-Scheduler/issues"
+  },
+  "homepage": "https://github.com/arvsxz05/CPU-Scheduler#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "consolidate": "^0.14.5",
+    "express": "^4.15.5",
+    "nunjucks": "^3.0.1"
+  }
+}
