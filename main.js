@@ -32,7 +32,7 @@ class System {
 			current_time += this.processes[i].burst;
 		}
 
-		return {waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
+		return {waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time, cumulative: cumulative};
 	}
 
 	calculateSJF() {
@@ -56,7 +56,7 @@ class System {
 			current_time += waiting_times[i].process.burst;
 		}
 
-		return {waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
+		return {waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time, cumulative: cumulative};
 	}
 
 	calculatePriority() {
@@ -80,7 +80,7 @@ class System {
 			current_time += waiting_times[i].process.burst;
 		}
 
-		return {waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
+		return {waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time, cumulative: cumulative};
 	}
 
 	calculateRoundRobin(timeslice) {
@@ -133,7 +133,7 @@ class System {
 			cumulative += waiting_times[i].waiting_time;
 		}
 
-		return {job_order: job_order, waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
+		return {job_order: job_order, waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time, cumulative: cumulative};
 	}
 
 	calculateSRPT() {
@@ -208,7 +208,7 @@ class System {
 		for (var i = waiting_times.length - 1; i >= 0; i--) {
 			cumulative += waiting_times[i].waiting_time;
 		}
-		return {job_order: job_order, waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time};
+		return {job_order: job_order, waiting_times: waiting_times, average_wt: cumulative/this.processes.length, time: current_time, cumulative: cumulative};
 	}
 }
 
