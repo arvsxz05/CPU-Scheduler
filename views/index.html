@@ -200,10 +200,10 @@
 								ctx.fillStyle = fcfs_obj.waiting_times[i].process.color;
 								ctx.fillRect(width - process_len + 5, 5, process_len, 140);
 								width -= process_len;
-								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + fcfs_obj.waiting_times[j].process.color + '">' + fcfs_obj.waiting_times[j].process.name + '</span>' + " = " + fcfs_obj.waiting_times[j].waiting_time + "</p>";
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + fcfs_obj.waiting_times[j].process.color + '">' + fcfs_obj.waiting_times[j].process.name + '</span>' + " = " + fcfs_obj.waiting_times[j].waiting_time + " ms</p>";
 								$("#display1 > div:nth-child(" + (j%4+1) + ")").append(temp);
 							}
-							$("#awt1").html("<center><strong>Average Waiting Time = " + fcfs_obj.cumulative + " / " + fcfs_obj.waiting_times.length + " = " + fcfs_obj.average_wt + "</strong></center>");
+							$("#awt1").html("<center><strong>Average Waiting Time = " + fcfs_obj.cumulative + " / " + fcfs_obj.waiting_times.length + " = " + fcfs_obj.average_wt + " ms</strong></center>");
 						}
 
 						canvas = document.getElementById('canvas2');
@@ -227,11 +227,11 @@
 							});
 
 							for (var i = 0; i < sjf_obj.waiting_times.length; i++) {
-								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + sjf_obj.waiting_times[i].process.color + '">' + sjf_obj.waiting_times[i].process.name + '</span>' + " = " + sjf_obj.waiting_times[i].waiting_time + "</p>";
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + sjf_obj.waiting_times[i].process.color + '">' + sjf_obj.waiting_times[i].process.name + '</span>' + " = " + sjf_obj.waiting_times[i].waiting_time + " ms</p>";
 								$("#display2 > div:nth-child(" + (i%4+1) + ")").append(temp);
 							}
 
-							$("#awt2").html("<center><strong>Average Waiting Time = " + sjf_obj.cumulative + " / " + sjf_obj.waiting_times.length + " = " + sjf_obj.average_wt + "</strong></center>");
+							$("#awt2").html("<center><strong>Average Waiting Time = " + sjf_obj.cumulative + " / " + sjf_obj.waiting_times.length + " = " + sjf_obj.average_wt + " ms</strong></center>");
 						}
 
 						canvas = document.getElementById('canvas3');
@@ -255,11 +255,11 @@
 							});
 
 							for (var i = 0; i < priority_obj.waiting_times.length; i++) {
-								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + priority_obj.waiting_times[i].process.color + '">' + priority_obj.waiting_times[i].process.name + '</span>' + " = " + priority_obj.waiting_times[i].waiting_time + "</p>";
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + priority_obj.waiting_times[i].process.color + '">' + priority_obj.waiting_times[i].process.name + '</span>' + " = " + priority_obj.waiting_times[i].waiting_time + " ms</p>";
 								$("#display3 > div:nth-child(" + (i%4+1) + ")").append(temp);
 							}
 
-							$("#awt3").html("<center><strong>Average Waiting Time = " + priority_obj.cumulative + " / " + priority_obj.waiting_times.length + " = " + priority_obj.average_wt + "</strong></center>");
+							$("#awt3").html("<center><strong>Average Waiting Time = " + priority_obj.cumulative + " / " + priority_obj.waiting_times.length + " = " + priority_obj.average_wt + " ms</strong></center>");
 						}
 
 						canvas = document.getElementById('canvas4');
@@ -276,11 +276,11 @@
 							}
 
 							for (var i = 0; i < srpt_obj.waiting_times.length; i++) {
-								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + srpt_obj.waiting_times[i].process.color + '">' + srpt_obj.waiting_times[i].process.name + '</span>' + " = " + srpt_obj.waiting_times[i].waiting_time + "</p>";
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + srpt_obj.waiting_times[i].process.color + '">' + srpt_obj.waiting_times[i].process.name + '</span>' + " = " + srpt_obj.waiting_times[i].waiting_time + " ms</p>";
 								$("#display4 > div:nth-child(" + (i%4+1) + ")").append(temp);
 							}
 
-							$("#awt4").html("<center><strong>Average Waiting Time = " + srpt_obj.cumulative + " / " + srpt_obj.waiting_times.length + " = " + srpt_obj.average_wt + "</strong></center>");
+							$("#awt4").html("<center><strong>Average Waiting Time = " + srpt_obj.cumulative + " / " + srpt_obj.waiting_times.length + " = " + srpt_obj.average_wt + " ms</strong></center>");
 						}
 
 						canvas = document.getElementById('canvas5');
@@ -297,11 +297,11 @@
 							}
 
 							for (var i = 0; i < rr_obj.waiting_times.length; i++) {
-								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + rr_obj.waiting_times[i].process.color + '">' + rr_obj.waiting_times[i].process.name + '</span>' + " = " + rr_obj.waiting_times[i].waiting_time + "</p>";
+								var temp = "<p style='margin-bottom:0;'>" + '<span class="badge badge-pill" style="background-color: ' + rr_obj.waiting_times[i].process.color + '">' + rr_obj.waiting_times[i].process.name + '</span>' + " = " + rr_obj.waiting_times[i].waiting_time + " ms</p>";
 								$("#display5 > div:nth-child(" + (i%4+1) + ")").append(temp);
 							}
 
-							$("#awt5").html("<center><strong>Average Waiting Time = " + rr_obj.cumulative + " / " + rr_obj.waiting_times.length + " = " + rr_obj.average_wt + "</strong></center>");
+							$("#awt5").html("<center><strong>Average Waiting Time = " + rr_obj.cumulative + " / " + rr_obj.waiting_times.length + " = " + rr_obj.average_wt + " ms</strong></center>");
 						}
 					}
 					r.readAsText(f);
